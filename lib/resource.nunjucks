@@ -2,7 +2,7 @@
   <div class="panel panel-white">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a class="collapsed" data-toggle="collapse" href="#panel_{{ resource.uniqueId }}">
+        <a class="" data-toggle="collapse" href="#panel_{{ resource.uniqueId }}">
           <span class="parent">{{ resource.parentUrl }}</span>{{ resource.relativeUri }}
         </a>
 
@@ -16,7 +16,7 @@
       </h4>
     </div>
 
-    <div id="panel_{{ resource.uniqueId }}" class="panel-collapse collapse">
+    <div id="panel_{{ resource.uniqueId }}" class="panel-collapse ">
       <div class="panel-body">
         {% if resource.parentUrl %}
           {% if resource.description %}
@@ -41,7 +41,7 @@
     </div>
 
     {% for method in resource.methods %}
-      <div class="modal fade" tabindex="0" id="{{ resource.uniqueId }}_{{ method.method }}">
+      <div class="modal" tabindex="0" id="{{ resource.uniqueId }}_{{ method.method }}">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -60,41 +60,21 @@
               {% endif %}
 
               {% if method.securedBy.length %}
-                {% for securedBy in method.securedBy %}
-                  <div class="alert alert-warning">
-                    <span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by {{ securedBy }}
-                    {% set securityScheme = securitySchemeWithName(securedBy) %}
-                    {% if securityScheme.description %}
-                      {% markdown %}{{ securityScheme.description }}{% endmarkdown %}
-                    {% endif %}
-                  </div>
-                {% endfor %}
+                <div class="alert alert-warning">
+                  <span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by {{ method.securedBy }}
+                </div>
               {% endif %}
-
-              <!-- Nav tabs -->
-              <ul class="nav nav-tabs">
-                {% if method.allUriParameters.length or method.queryParameters or method.headers or method.body %}
-                  <li class="active">
-                    <a href="#{{ resource.uniqueId }}_{{ method.method }}_request" data-toggle="tab">Request</a>
-                  </li>
-                {% endif %}
-
-                {% if method.responses %}
-                  <li>
-                    <a href="#{{ resource.uniqueId }}_{{ method.method }}_response" data-toggle="tab">Response</a>
-                  </li>
-                {% endif %}
-              </ul>
 
               <!-- Tab panes -->
               <div class="tab-content">
                 {% if method.allUriParameters.length or method.queryParameters or method.headers or method.body %}
-                  <div class="tab-pane active" id="{{ resource.uniqueId }}_{{ method.method }}_request">
+                <h3 class="badge"><strong>Request</strong></h3>
+                  <div class="tab-pane active" id="{{ resource.uniqueId }}_{{ method.method }}_request"> 
                     {% if resource.allUriParameters.length %}
                       <h3>URI Parameters</h3>
                       <ul>
                         {% for item in resource.allUriParameters %}
-                          {% include "./item.nunjucks" %}
+                          {% include "item.nunjucks" %}
                         {% endfor %}
                       </ul>
                     {% endif %}
@@ -103,7 +83,7 @@
                       <h3>Headers</h3>
                       <ul>
                         {% for key, item in method.headers %}
-                          {% include "./item.nunjucks" %}
+                          {% include "item.nunjucks" %}
                         {% endfor %}
                       </ul>
                     {% endif %}
@@ -112,7 +92,7 @@
                       <h3>Query Parameters</h3>
                       <ul>
                         {% for key, item in method.queryParameters %}
-                          {% include "./item.nunjucks" %}
+                          {% include "item.nunjucks" %}
                         {% endfor %}
                       </ul>
                     {% endif %}
@@ -125,7 +105,7 @@
                           <strong>Form Parameters</strong>
                           <ul>
                             {% for key, item in b.formParameters %}
-                              {% include "./item.nunjucks" %}
+                              {% include "item.nunjucks" %}
                             {% endfor %}
                           </ul>
                         {% endif %}
@@ -145,7 +125,8 @@
                 {% endif %}
 
                 {% if method.responses %}
-                  <div class="tab-pane" id="{{ resource.uniqueId }}_{{ method.method }}_response">
+                <h3 class="badge"><strong>Response</strong></h3>
+                  <div class="tab-pane" id="{{ resource.uniqueId }}_{{ method.method }}_response"> 
                     {% for key, response in method.responses %}
                       <h2>HTTP status code <a href="http://httpstatus.es/{{ key }}" target="_blank">{{ key }}</a></h2>
                       {% markdown %}{{ response.description}}{% endmarkdown %}
@@ -154,7 +135,7 @@
                         <h3>Headers</h3>
                         <ul>
                           {% for key, item in response.headers %}
-                            {% include "./item.nunjucks" %}
+                            {% include "item.nunjucks" %}
                           {% endfor %}
                         </ul>
                       {% endif %}
@@ -188,5 +169,5 @@
 {% endif %}
 
 {% for resource in resource.resources %}
-  {% include "./resource.nunjucks" %}
+  {% include "resource.nunjucks" %}
 {% endfor %}
