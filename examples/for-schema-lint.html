@@ -1,0 +1,348 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Example API documentation</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="generator" content="https://github.com/kevinrenskers/raml2html 2.1.1">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/default.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
+    <script type="text/javascript" src="http://jsonschemalint.com/draft4/js/is-my-json-valid/is-my-json-valid.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('.page-header pre code, .top-resource-description pre code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+
+        $('[data-toggle]').click(function() {
+            var selector = $(this).data('target') + ' pre code';
+            $(selector).each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // open modal on hashes like #_action_get
+        $(window).bind('hashchange', function(e) {
+            var anchor_id = document.location.hash.substr(1); //strip #
+            var element = $('#' + anchor_id);
+
+            // do we have such element + is it a modal?  --> show it
+            if (element.length && element.hasClass('modal')) {
+                element.modal('show');
+            }
+        });
+
+        // execute hashchange on first page load
+        $(window).trigger('hashchange');
+
+        // remove url fragment on modal hide
+        $('.modal').on('hidden.bs.modal', function() {
+            if (history && history.replaceState) {
+                history.replaceState({}, '', '#');
+            }
+        });
+
+        console.log($('.json-schema').text());
+        var validator = window['isMyJsonValid'];
+        var documentValidator = validator($('.json-schema').text(), {
+                verbose: true
+              });
+
+        var jsonDoc = $('.json-doc').text();
+        jsonDoc = JSON.parse(jsonDoc);
+        console.log(jsonDoc);
+        documentValidator(jsonDoc,{verbose: true});
+        console.log(documentValidator.error);
+
+    });
+    </script>
+    <style>
+    .hljs {
+        background: transparent;
+    }
+    
+    .parent {
+        color: #999;
+    }
+    
+    .list-group-item > .badge {
+        float: none;
+        margin-right: 6px;
+    }
+    
+    .panel-title > .methods {
+        float: right;
+    }
+    
+    .badge {
+        border-radius: 0;
+        text-transform: uppercase;
+        width: 70px;
+        font-weight: normal;
+        color: #f3f3f6;
+        line-height: normal;
+    }
+    
+    .badge_get {
+        background-color: #63a8e2;
+    }
+    
+    .badge_post {
+        background-color: #6cbd7d;
+    }
+    
+    .badge_put {
+        background-color: #22bac4;
+    }
+    
+    .badge_delete {
+        background-color: #d26460;
+    }
+    
+    .badge_patch {
+        background-color: #ccc444;
+    }
+    
+    .list-group,
+    .panel-group {
+        margin-bottom: 0;
+    }
+    
+    .panel-group .panel+.panel-white {
+        margin-top: 0;
+    }
+    
+    .panel-group .panel-white {
+        border-bottom: 1px solid #F5F5F5;
+        border-radius: 0;
+    }
+    
+    .panel-white:last-child {
+        border-bottom-color: white;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    
+    .panel-white .panel-heading {
+        background: white;
+    }
+    
+    .tab-pane ul {
+        padding-left: 2em;
+    }
+    
+    .tab-pane h2 {
+        font-size: 1.2em;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .tab-pane h3 {
+        font-size: 1.1em;
+    }
+    
+    .tab-content {
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+    }
+    
+    #sidebar {
+        margin-top: 30px;
+        padding-right: 5px;
+        overflow: auto;
+        height: 90%;
+    }
+    
+    .top-resource-description {
+        border-bottom: 1px solid #ddd;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+    }
+    
+    .resource-description {
+        border-bottom: 1px solid #fcfcfc;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+    }
+    
+    .resource-description p:last-child {
+        margin: 0;
+    }
+    
+    .list-group .badge {
+        float: left;
+    }
+    
+    .method_description {
+        margin-left: 85px;
+    }
+    
+    .method_description p:last-child {
+        margin: 0;
+    }
+    
+    .list-group-item {
+        cursor: pointer;
+    }
+    
+    .list-group-item:hover {
+        background-color: #f5f5f5;
+    }
+    </style>
+</head>
+
+<body data-spy="scroll" data-target="#sidebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9" role="main">
+                <div class="page-header">
+                    <h1>Example API documentation <small>version 1</small></h1>
+                    <p>http://example.com/1</p>
+                    <h3 id="Welcome"><a href="#Welcome">Welcome</a></h3>
+                    <p>Welcome to the Example Documentation. The Example API allows you to do stuff. See also <a href="https://www.example.com">example.com</a>.</p><pre><code class="lang-javascript">var raml2html = require(&#39;raml2html&#39;);
+
+// Using the default templates:
+// source can either be a filename, file contents (string) or parsed RAML object
+raml2html.parse(source, onSuccess, onError);
+
+// Using your own templates:
+// - config should be an object with at least an `template` property
+// - config can also include `helpers` and `partials`
+// - the config object will be accessible from your handlebars templates
+raml2html.parseWithConfig(source, config, onSuccess, onError);
+</code></pre>
+                    <h3 id="Chapter-two"><a href="#Chapter-two">Chapter two</a></h3>
+                    <p>More content here. Including <strong>bold</strong> text!</p>
+                    <p>Small table:</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>C</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Done</p>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row">
+
+            <div class="col-xs-12 col-md-6">
+
+                <div class="panel panel-default panel-collapse panel-danger" ng-class="{'panel-danger': ctrl.schemaErrors.length, 'panel-success': !ctrl.schemaErrors.length}">
+                    <div class="panel-heading">
+                        JSON Schema
+                        
+                    </div>
+                    <div class="panel-body">
+
+                        <form novalidate="" class="ng-pristine ng-valid">
+                            <div class="form-group">
+                                <textarea ng-model="ctrl.schema" class="form-control json ng-pristine ng-untouched ng-valid json-schema">{
+  "description": "Any validation failures are shown in the right-hand Messages pane.",
+  "type": "object",
+  "properties": {
+    "foo": {
+      "type": "number"
+    },
+    "bar": {
+      "type": "string",
+      "enum": [
+        "a",
+        "b",
+        "c"
+      ]
+    }
+  }
+}
+                                </textarea>
+                            </div>
+                        </form>
+                        <p ng-show="ctrl.schemaMessage" ng-bind="ctrl.schemaMessage" class="ng-binding ng-hide"></p>
+
+                    </div>
+
+                    <table class="table" ng-show="ctrl.schemaErrors.length">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Error</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- ngRepeat: error in ctrl.schemaErrors --><tr ng-repeat="error in ctrl.schemaErrors" class="ng-scope">
+                                <td ng-bind="error.field" class="ng-binding"></td>
+                                <td ng-bind="error.message" class="ng-binding">Schema is invalid JSON. Try http://jsonlint.com to fix it.</td>
+                                <td><pre class="error-value ng-binding" ng-bind="error.value | json"></pre></td>
+                            </tr><!-- end ngRepeat: error in ctrl.schemaErrors -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+
+                <div class="panel panel-default panel-danger" ng-class="{'panel-danger': ctrl.documentErrors.length, 'panel-success': !ctrl.documentErrors.length}">
+                    <div class="panel-heading">
+                        JSON Document
+                    </div>
+                    <div class="panel-body">
+
+                        <form novalidate="" class="ng-pristine ng-valid">
+                            <div class="form-group">
+                                <textarea ng-model="ctrl.document" class="form-control json ng-pristine ng-untouched ng-valid json-doc">
+{
+  "foo": 12345,
+  "bar": "d"
+}</textarea>
+                            </div>
+                        </form>
+                        <p ng-show="ctrl.documentMessage" ng-bind="ctrl.documentMessage" class="ng-binding ng-hide"></p>
+
+                    </div>
+
+                    <table class="table" ng-show="ctrl.documentErrors.length">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Error</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- ngRepeat: error in ctrl.documentErrors --><tr ng-repeat="error in ctrl.documentErrors" class="ng-scope">
+                                <td ng-bind="error.field" class="ng-binding"></td>
+                                <td ng-bind="error.message" class="ng-binding">Document is invalid JSON. Try http://jsonlint.com to fix it.</td>
+                                <td><pre class="error-value ng-binding" ng-bind="error.value | json"></pre></td>
+                            </tr><!-- end ngRepeat: error in ctrl.documentErrors -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
